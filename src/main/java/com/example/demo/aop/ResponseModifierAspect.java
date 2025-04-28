@@ -26,5 +26,5 @@ public class ResponseModifierAspect {
         }
 
         return result;
-    }
+    } //similarly input validation can be doe using AOP
 }

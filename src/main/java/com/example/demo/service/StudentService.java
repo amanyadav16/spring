@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -24,11 +25,11 @@ public class StudentService {
         return studentRepo.save(student);
     }
 
-    public Optional<Student> getStudent(int rollNumber) {
+    public Optional<Student> getStudent(UUID rollNumber) {
         return studentRepo.findById(rollNumber);
     }
 
-    public boolean removeStudent(int rollNumber){
+    public boolean removeStudent(UUID rollNumber){
         if(studentRepo.existsById(rollNumber)){
             studentRepo.deleteById(rollNumber);
             return true;

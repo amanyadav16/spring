@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.exception.StudentNotFoundException;
 import com.example.demo.model.Student;
 import com.example.demo.service.StudentService;
 import jakarta.validation.Valid;
@@ -8,7 +9,9 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.UUID;
 
 //@CrossOrigin
 @Getter
@@ -27,8 +30,8 @@ public class StudentController {
     }
 
     @GetMapping("/{rollNumber}")
-    public ResponseEntity<Student> getStudent(@PathVariable int rollNumber) {
-        return ResponseEntity.ok(studentService.getStudent(rollNumber).orElse(new Student()));
+    public ResponseEntity<Student> getStudent(@PathVariable UUID rollNumber) {
+        return ResponseEntity.ok(studentService.getStudent(rollNumber).orElseThrow(() -> new StudentNotFoundException("Student not exist.")));
     }
 
     @PostMapping("")
@@ -42,11 +45,12 @@ public class StudentController {
     }
 
     @DeleteMapping("/{rollNumber}")
-    public ResponseEntity<String> deleteStudent(@PathVariable int rollNumber) {
+    public ResponseEntity<String> deleteStudent(@PathVariable UUID rollNumber) {
         boolean isDeleted = studentService.removeStudent(rollNumber);
-        return isDeleted ?
-                ResponseEntity.ok("Student deleted successfully!") :
-                ResponseEntity.status(404).body("Student not found.");
+        if (isDeleted)
+            return ResponseEntity.ok("Student deleted successfully!");
+        else
+            throw new StudentNotFoundException("Student not exist.");
     }
 
     //other operations

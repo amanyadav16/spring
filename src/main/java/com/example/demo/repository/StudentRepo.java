@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface StudentRepo extends JpaRepository<Student,Integer> {
+public interface StudentRepo extends JpaRepository<Student, UUID> {
     //some common column related method that JPA implicitly provides
     List<Student> getByBranch(String branch);
 
