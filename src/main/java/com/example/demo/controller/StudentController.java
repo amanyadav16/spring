@@ -23,7 +23,7 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<List<Student>> getAllStudents() {
         List<Student> students = studentService.getAllStudents();
         return ResponseEntity.ok(students);
@@ -34,12 +34,12 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getStudent(rollNumber).orElseThrow(() -> new StudentNotFoundException("Student not exist.")));
     }
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<Student> addStudent(@Valid @RequestBody Student student) { //converts object to json body
         return ResponseEntity.status(201).body(studentService.addStudent(student));
     }
 
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<Student> updateStudent(@RequestBody Student student) {
         return ResponseEntity.ok(studentService.updateStudent(student));
     }
