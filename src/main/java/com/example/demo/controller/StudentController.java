@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.exception.StudentNotFoundException;
 import com.example.demo.model.Student;
 import com.example.demo.service.StudentService;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,9 +25,19 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    @PostConstruct
+    public void init(){
+        System.out.println("***Student component created***");
+    }
+
     @GetMapping("")
     public ResponseEntity<List<Student>> getAllStudents() {
         List<Student> students = studentService.getAllStudents();
+        
+        //   ResponseModifier responseModifier = new ResponseModifier(students,"studentData");
+       //   responseModifier.addProperty("collage", "IET DAVV");
+       //   responseModifier.addProperty("Branch", "IT");
+       // return ResponseEntity.ok(responseModifier);
         return ResponseEntity.ok(students);
     }
 
@@ -62,5 +74,10 @@ public class StudentController {
     @GetMapping("/branches")
     public ResponseEntity<List<String>> getBranches() {
         return ResponseEntity.ok(studentService.getBranches());
+    }
+
+    @PreDestroy
+    public void cleanup(){
+        System.out.println("***Student component destroying***");
     }
 }
