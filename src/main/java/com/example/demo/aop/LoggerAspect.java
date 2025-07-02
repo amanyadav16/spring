@@ -1,31 +1,38 @@
 package com.example.demo.aop;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.logging.Logger;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-@Slf4j
 public class LoggerAspect {
 
-    //returnType fullyQualifiedClassName.method(arguments)
+	private static final Logger logger = Logger.getLogger(LoggerAspect.class.getName());
+
     @Before("execution(* com.example.demo.controller.StudentController.*(..))")
     public void logBeforeCall(JoinPoint joinPoint) {
-        //executionTime = 0;
-        log.info("Execution started: {} {}", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
+		logger.info("Execution started: " + joinPoint.getSignature().getDeclaringTypeName() + " "
+				+ joinPoint.getSignature().getName());
     }
 
     @AfterReturning("execution(* com.example.demo.controller.StudentController.*(..))")
     public void logAfterCall(JoinPoint joinPoint) {
-        log.info("Execution successful: {} {}", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
+		logger.info("Execution successful: " + joinPoint.getSignature().getDeclaringTypeName() + " "
+				+ joinPoint.getSignature().getName());
     }
 
     @AfterThrowing("execution(* com.example.demo.controller.StudentController.*(..))")
     public void logAfterCallWhenIssue(JoinPoint joinPoint) {
-        log.info("Issue in execution: {} {}", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
+		logger.info("Issue in execution: " + joinPoint.getSignature().getDeclaringTypeName() + " "
+				+ joinPoint.getSignature().getName());
     }
 
     @Around("execution(* com.example.demo.controller.StudentController.*(..))")
@@ -33,7 +40,7 @@ public class LoggerAspect {
         long startTime = System.currentTimeMillis();
         Object obj = proceedingJoinPoint.proceed();
         long endTime = System.currentTimeMillis();
-        log.info("Execution time :{} ms\n",(endTime-startTime));
+		logger.info("Execution time: " + (endTime - startTime) + " ms\n");
         return obj;
     }
 }
